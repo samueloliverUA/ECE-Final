@@ -21,7 +21,7 @@ typedef struct player_t {
     int decksize;
 } player;
 
-// Function prototypes
+
 void initializeDeck(card deck[], int deckSize);
 void shuffleDeck(card deck[]);
 int drawCard(card deck[], int *deckSize, player *p);
@@ -45,7 +45,7 @@ int main() {
     char playAgain;
 
     do {
-        // create new game
+        
         initializeDeck(deck, DECK_SIZE);
         shuffleDeck(deck);
         deckSize = DECK_SIZE;
@@ -62,18 +62,18 @@ int main() {
         scanf("%19s", players[1].playerName);
         for (i = 0; i < PLAYER_COUNT; i++) players[i].decksize = 0;
 
-        // deal
+        
         for (i = 0; i < HANDNUM; i++)
             for (j = 0; j < PLAYER_COUNT; j++)
                 drawCard(deck, &deckSize, &players[j]);
 
-        // initial hands
+        
         printPlayerHand(&players[0]);
         printPlayerHand(&players[1]);
         printf("Card pile is empty.\n\n");
 
         current = 0;
-        // game loop
+        
         while (1) {
             player *p = &players[current];
             player *other = &players[(current + 1) % PLAYER_COUNT];
@@ -88,7 +88,7 @@ int main() {
                 break;
             }
 
-            // prompt play
+            
             int choice;
             printf("%s, enter which card to play from 0 to %d: ",
                    p->playerName, p->decksize - 1);
@@ -98,23 +98,23 @@ int main() {
                        p->playerName, p->decksize);
                 continue;
             }
-            // select card
+            
             card sel = p->deck[choice];
-            // validate against pile
+            
             if (pileSize > 0 && !isValidCard(pile[pileSize-1], sel)) {
                 printf("Invalid choice, cannot place "); printCard(sel);
                 printf(" in "); printCard(pile[pileSize-1]);
                 printf("\n\n");
                 continue;
             }
-            // play
+            
             pile[pileSize++] = sel;
-            // remove from hand
+            
             for (i = choice; i < p->decksize - 1; i++)
                 p->deck[i] = p->deck[i+1];
             p->decksize--;
 
-            // handle special
+            
             if (sel.name == 'A') {
                 handleAND(p, pile[pileSize-2], other, deck, &deckSize);
                 current = (current + 1) % PLAYER_COUNT;
@@ -129,14 +129,14 @@ int main() {
                 current = (current + 1) % PLAYER_COUNT;
             }
 
-            // show state
+            
             printPlayerHand(&players[0]);
             printPlayerHand(&players[1]);
             printf("Top of card pile is: "); printCard(pile[pileSize-1]);
             printf("\n\n");
         }
 
-        // play again
+        
         printf("Play again? ");
         scanf(" %c", &playAgain);
         printf("Goodbye\n");
@@ -145,7 +145,7 @@ int main() {
     return 0;
 }
 
-// implementations
+
 void initializeDeck(card deck[], int deckSize) {
     const char cols[] = {'R','Y','G','B'};
     int idx = 0;
@@ -153,11 +153,18 @@ void initializeDeck(card deck[], int deckSize) {
         for (int rep = 0; rep < 2; rep++)
             for (char n = '0'; n <= '9'; n++)
                 deck[idx++] = (card){n, cols[c]};
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++){
         deck[idx++] = (card){'A','S'};
-    for (int i = 0; i < 5; i++) deck[idx++] = (card){'O','S'};
-    for (int i = 0; i < 5; i++) deck[idx++] = (card){'N','S'};
-    for (int i = 0; i < 5; i++) deck[idx++] = (card){'R','S'};
+    }
+    for (int i = 0; i < 5; i++) {
+        deck[idx++] = (card){'O','S'};
+    }
+    for (int i = 0; i < 5; i++) {
+        deck[idx++] = (card){'N','S'};
+    }
+    for (int i = 0; i < 5; i++) {
+        deck[idx++] = (card){'R','S'};
+    }
 }
 
 void shuffleDeck(card deck[]) {
