@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+
 
 #define DECK_SIZE 100
 #define HAND_SIZE 100
-#define START_HAND 7
+#define HANDNUM 7
 #define PLAYER_COUNT 2
 
-// Card struct
+
 typedef struct card_t {
-    char name;   // '0'-'9', 'A' (AND), 'O' (OR), 'N' (NOT), 'R' (Reverse)
-    char color;  // 'R','Y','G','B','S' (special)
+    char name;  
+    char color;  
 } card;
 
-// Player struct
+
 typedef struct player_t {
     char playerName[20];
     card deck[HAND_SIZE];
@@ -44,8 +44,6 @@ int main() {
     int current = 0;
     char playAgain;
 
-    srand((unsigned)time(NULL));
-
     do {
         // create new game
         initializeDeck(deck, DECK_SIZE);
@@ -65,7 +63,7 @@ int main() {
         for (i = 0; i < PLAYER_COUNT; i++) players[i].decksize = 0;
 
         // deal
-        for (i = 0; i < START_HAND; i++)
+        for (i = 0; i < HANDNUM; i++)
             for (j = 0; j < PLAYER_COUNT; j++)
                 drawCard(deck, &deckSize, &players[j]);
 
@@ -155,7 +153,8 @@ void initializeDeck(card deck[], int deckSize) {
         for (int rep = 0; rep < 2; rep++)
             for (char n = '0'; n <= '9'; n++)
                 deck[idx++] = (card){n, cols[c]};
-    for (int i = 0; i < 5; i++) deck[idx++] = (card){'A','S'};
+    for (int i = 0; i < 5; i++)
+        deck[idx++] = (card){'A','S'};
     for (int i = 0; i < 5; i++) deck[idx++] = (card){'O','S'};
     for (int i = 0; i < 5; i++) deck[idx++] = (card){'N','S'};
     for (int i = 0; i < 5; i++) deck[idx++] = (card){'R','S'};
